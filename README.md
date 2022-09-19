@@ -1,6 +1,5 @@
 # asset_managment_app
-
-A new Flutter project.
+App for managing asstes (Currently available only in INR).
 
 ## Getting Started
 
