@@ -49,7 +49,7 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
     });
   }
 
-  showLoaderDialog(BuildContext context, String message) {
+  Future<dynamic> showLoaderDialog(BuildContext context, String message) {
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -140,7 +140,7 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
                         style:
                             GoogleFonts.poppins(fontWeight: FontWeight.normal),
                       ),
-                      Text(widget.payment == "sent" ? "Sending" : " Recieving",
+                      Text(widget.payment == "sent" ? "Sending" : " Receiving",
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               color: widget.payment == "sent"
@@ -198,11 +198,11 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: widget.payment == "sent"
-                                  ? MaterialStateProperty.all(Colors.orange)
-                                  : MaterialStateProperty.all(Colors.green)),
+                                  ? WidgetStateProperty.all(Colors.orange)
+                                  : WidgetStateProperty.all(Colors.green)),
                           onPressed: handleMakeTxn,
                           child: Text(
-                            widget.payment == "sent" ? "Send" : "Recieve",
+                            widget.payment == "sent" ? "Send" : "Receive",
                             style: GoogleFonts.poppins(),
                           ),
                         ),

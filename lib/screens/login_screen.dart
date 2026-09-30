@@ -41,8 +41,17 @@ class _LoginScreenState extends State<LoginScreen> {
           style: GoogleFonts.poppins(),
         ),
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2b5876), Color(0xFF4e4376)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        height: mediaQuery.size.height,
+        child: SingleChildScrollView(
+          child: SizedBox(
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,15 +70,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         "Assets",
                         style: GoogleFonts.poppins(
-                            color: Colors.blue,
+                            color: Colors.white,
                             fontSize: 35,
                             fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
                 ),
-                Card(
-                  elevation: 5.0,
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10.0,
+                      )
+                    ],
+                  ),
                   child: Column(
                     children: [
                       Container(
@@ -98,12 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       // if (!isFormLoading)
                       TextButton(
+                        onPressed: isFormLoading ? null : toggleForm,
                         child: Text(
                           isSigningUp
                               ? "Already have an account? Login instead."
                               : "Dont have an account? Signup instead.",
                         ),
-                        onPressed: isFormLoading ? null : toggleForm,
                       ),
                       const SizedBox(
                         height: 10,
@@ -117,15 +136,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   "version 1.0",
                   style: GoogleFonts.poppins(
-                      color: Colors.grey[600], fontSize: 10),
+                      color: Colors.white70, fontSize: 10),
                 ),
                 Text(
-                  "Copyright Zero Friction(TM)",
+                  "Copyright NMT Solutions (OPC) PVT LTD(TM)",
                   style: GoogleFonts.poppins(
-                      color: Colors.grey[600], fontSize: 10),
+                      color: Colors.white70, fontSize: 10),
                 )
               ],
-            )),
+            ))),
       ),
     );
   }

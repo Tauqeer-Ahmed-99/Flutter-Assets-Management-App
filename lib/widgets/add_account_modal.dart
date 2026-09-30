@@ -41,7 +41,7 @@ class _AddAccountModalState extends State<AddAccountModal> {
     });
   }
 
-  showLoaderDialog(BuildContext context) {
+  Future<dynamic> showLoaderDialog(BuildContext context) {
     return showDialog(
       barrierDismissible: false,
       context: context,

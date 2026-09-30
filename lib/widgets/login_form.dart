@@ -30,12 +30,12 @@ class _LoginFormState extends State<LoginForm> {
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"));
   }
 
-  handleEmailChange(_email) {
-    email = _email;
+  void handleEmailChange(email) {
+    email = email;
   }
 
-  handlePasswordChange(_password) {
-    password = _password;
+  void handlePasswordChange(password) {
+    password = password;
   }
 
   String? validateFormEmail(String? email) {
@@ -63,9 +63,9 @@ class _LoginFormState extends State<LoginForm> {
     var mediaQuery = MediaQuery.of(context);
 
     handleLoginTap(auth) async {
-      var _isFormValid = _formKey.currentState!.validate();
+      var isFormValid = _formKey.currentState!.validate();
 
-      if (_isFormValid) {
+      if (isFormValid) {
         widget.setFormLoading(true);
         setState(() {
           _isLoading = true;
@@ -135,6 +135,32 @@ class _LoginFormState extends State<LoginForm> {
                           "Login",
                           style: GoogleFonts.poppins(fontSize: 18),
                         ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        if (email.isNotEmpty && validateEmail(email)) {
+                          await auth.forgotPassword(context, email);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Please enter a valid email address to reset your password.",
+                                style: GoogleFonts.poppins(),
+                              ),
+                              backgroundColor: Theme.of(context).colorScheme.error,
+                            ),
+                          );
+                        }
+                      },
+                child: Text(
+                  "Forgot Password?",
+                  style: GoogleFonts.poppins(),
                 ),
               ),
             ],

@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  showLoaderDialog(BuildContext context, String message) {
+  Future<dynamic> showLoaderDialog(BuildContext context, String message) {
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -95,11 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).pop();
   }
 
-  showDeleteDialog(BuildContext _context, Accounts accounts) {
+  Future<dynamic> showDeleteDialog(BuildContext context, Accounts accounts) {
     return showDialog(
       barrierDismissible: true,
-      context: _context,
-      builder: (BuildContext _context) {
+      context: context,
+      builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
             "Are you sure?",
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(_context).pop();
+                Navigator.of(context).pop();
               },
               child: Text(
                 "CANCEL",
@@ -146,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         isScrollControlled: true,
+        backgroundColor: Colors.white,
         context: context,
         builder: (_) {
           return AddAccountModal(
@@ -210,7 +211,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ],
               ),
-              body: accounts.isLoading
+              body: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF2b5876), Color(0xFF4e4376)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: accounts.isLoading
                   ? SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -229,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               )
-                              .toList(),
+                              ,
                         ],
                       ),
                     )
@@ -237,10 +246,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? Center(
                           child: Text(
                           "No accounts available,\nAdd a new account by tapping button below.",
+                          textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Colors.grey),
+                              color: Colors.white70),
                         ))
                       : SizedBox(
                           height: mediaQuery.size.height,
@@ -254,31 +264,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                 decoration: BoxDecoration(
                                     boxShadow: const [
                                       BoxShadow(
-                                        color: Colors.grey,
+                                        color: Colors.black26,
                                         blurRadius: 10.0,
                                       ),
                                     ],
                                     borderRadius: BorderRadius.circular(15),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.blue[800] as Color,
-                                        Colors.blue[300] as Color
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    )),
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                                    ),
                                 child: Column(
                                   children: [
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          "Hi ${auth.currentUser?.displayName}! ",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
+                                        Flexible(
+                                          child: Text(
+                                            "Hi ${auth.currentUser?.displayName}! ",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -286,18 +294,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          "Current assets value: ",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 18,
-                                              color: Colors.white),
+                                        Flexible(
+                                          child: Text(
+                                            "Current assets value: ",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
-                                        Text(
-                                          "₹${accounts.getTotalAssets().toString()}",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green[900]),
+                                        Flexible(
+                                          child: Text(
+                                            "₹${accounts.getTotalAssets().toString()}",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green[100]),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         )
                                       ],
                                     )
@@ -324,6 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
+              ),
               floatingActionButton: SizedBox(
                 height: 50,
                 width: 150,

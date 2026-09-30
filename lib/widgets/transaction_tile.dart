@@ -24,35 +24,48 @@ class TransactionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      selected: deleteSelection.contains(transaction.id),
-      selectedTileColor: Colors.grey[300],
-      title: Text(
-        transaction.reason,
-        style: GoogleFonts.poppins(),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: deleteSelection.contains(transaction.id)
+            ? Colors.red.withValues(alpha: 0.4)
+            : Colors.white.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
       ),
-      subtitle: Text(
-          DateFormat.yMMMd().add_jm().format(DateTime.parse(transaction.date))),
-      trailing: SizedBox(
-        width: 150,
-        height: double.infinity,
-        child: Center(
-          child: Text(
-            "${transaction.payment == "sent" ? "-" : "+"} ₹${transaction.amount}",
-            style: GoogleFonts.poppins(
-                fontSize: 18,
-                color: transaction.payment == "sent"
-                    ? Colors.orange
-                    : Colors.green),
+      child: ListTile(
+        selected: deleteSelection.contains(transaction.id),
+        selectedTileColor: Colors.transparent,
+        title: Text(
+          transaction.reason,
+          style: GoogleFonts.poppins(color: Colors.white),
+        ),
+        subtitle: Text(
+            DateFormat.yMMMd().add_jm().format(DateTime.parse(transaction.date)),
+            style: GoogleFonts.poppins(color: Colors.white70),
+        ),
+        trailing: SizedBox(
+          width: 150,
+          height: double.infinity,
+          child: Center(
+            child: Text(
+              "${transaction.payment == "sent" ? "-" : "+"} ₹${transaction.amount}",
+              style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: transaction.payment == "sent"
+                      ? Colors.orange[300]
+                      : Colors.green[300]),
+            ),
           ),
         ),
+        onTap: () {
+          if (isDeleteSelectionActive) {
+            toggleDeleteSelection(transaction.id);
+          }
+        },
+        onLongPress: () => setDeleteSelectionActive(transaction.id),
       ),
-      onTap: () {
-        if (isDeleteSelectionActive) {
-          toggleDeleteSelection(transaction.id);
-        }
-      },
-      onLongPress: () => setDeleteSelectionActive(transaction.id),
     );
   }
 }

@@ -8,19 +8,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './firebase_options.dart' as firebase_config;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: firebase_config.FirebaseOptions.apiKey,
-      appId: firebase_config.FirebaseOptions.appId,
-      messagingSenderId: firebase_config.FirebaseOptions.messagingSenderID,
-      projectId: firebase_config.FirebaseOptions.projectId,
-    ),
-  );
+  await Firebase.initializeApp();
 
   Provider.debugCheckInvalidValueType = null;
 

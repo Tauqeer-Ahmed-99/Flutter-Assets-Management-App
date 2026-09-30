@@ -39,24 +39,24 @@ class _SignUpFormState extends State<SignUpForm> {
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"));
   }
 
-  handleUserNameChange(_userName) {
-    userName = _userName;
+  void handleUserNameChange(userName) {
+    userName = userName;
   }
 
-  handleEmailChange(_email) {
-    email = _email;
+  void handleEmailChange(email) {
+    email = email;
   }
 
-  handleCnfEmailChange(_email) {
-    cnfEmail = _email;
+  void handleCnfEmailChange(email) {
+    cnfEmail = email;
   }
 
-  handlePasswordChange(_password) {
-    password = _password;
+  void handlePasswordChange(password) {
+    password = password;
   }
 
-  handleCnfPasswordChange(_password) {
-    cnfPassword = _password;
+  void handleCnfPasswordChange(password) {
+    cnfPassword = password;
   }
 
   String? validateUserName(String? userName) {
@@ -114,9 +114,9 @@ class _SignUpFormState extends State<SignUpForm> {
     var mediaQuery = MediaQuery.of(context);
 
     handleSignupTap(auth) async {
-      var _isFormValid = _formKey.currentState!.validate();
+      var isFormValid = _formKey.currentState!.validate();
 
-      if (_isFormValid) {
+      if (isFormValid) {
         widget.setFormLoading(true);
         setState(() {
           _isLoading = true;

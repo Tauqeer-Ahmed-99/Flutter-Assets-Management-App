@@ -49,7 +49,7 @@ class _AccountDetailsState extends State<AccountDetails> {
       _selectedIndex = index;
     });
     if (index == 0) {
-      payment = "recieved";
+      payment = "received";
     } else {
       payment = "sent";
     }
@@ -57,7 +57,7 @@ class _AccountDetailsState extends State<AccountDetails> {
     _showTransactionForm(context, account);
   }
 
-  void _showTransactionForm(BuildContext _context, Account account) {
+  void _showTransactionForm(BuildContext context, Account account) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -65,11 +65,11 @@ class _AccountDetailsState extends State<AccountDetails> {
         context: context,
         builder: (_) {
           return AddTransactionModal(
-              payment: payment, account: account, context: _context);
+              payment: payment, account: account, context: context);
         });
   }
 
-  showLoaderDialog(BuildContext context, String message) {
+  Future<dynamic> showLoaderDialog(BuildContext context, String message) {
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -107,7 +107,7 @@ class _AccountDetailsState extends State<AccountDetails> {
     Navigator.of(context).pop();
   }
 
-  showDeleteDialog(BuildContext _context, BuildContext context,
+  Future<dynamic> showDeleteDialog(BuildContext context,
       Accounts accounts, String accountId) {
     return showDialog(
       barrierDismissible: true,
@@ -139,7 +139,7 @@ class _AccountDetailsState extends State<AccountDetails> {
             ),
             TextButton(
               onPressed: () =>
-                  handleConfirmDelete(_context, accounts, accountId),
+                  handleConfirmDelete(context, accounts, accountId),
               child: Text(
                 "DELETE TRANSACTIONS",
                 style: GoogleFonts.poppins(),
@@ -152,8 +152,8 @@ class _AccountDetailsState extends State<AccountDetails> {
   }
 
   void handleDeleteButtonTap(
-      BuildContext _context, Accounts accounts, String accountId) {
-    showDeleteDialog(_context, context, accounts, accountId);
+      BuildContext context, Accounts accounts, String accountId) {
+    showDeleteDialog(context, accounts, accountId);
   }
 
   final skeletonsCount = [1, 2, 3, 4, 5, 6];
@@ -165,7 +165,7 @@ class _AccountDetailsState extends State<AccountDetails> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     final account = arguments["account"] as Account;
     final accounts = arguments["accounts"] as Accounts;
-    final __userIndex = arguments["userIndex"] as int;
+    final _userIndex = arguments["userIndex"] as int;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -187,10 +187,27 @@ class _AccountDetailsState extends State<AccountDetails> {
                 tooltip: "Delete selected",
               ),
           ]),
-      body: Consumer<Accounts>(
+              body: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF2b5876), Color(0xFF4e4376)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Consumer<Accounts>(
         builder: ((context, accounts, child) {
           var activeAccount = accounts.getAccounts
-              .firstWhere((element) => element.id == account.id);
+              .firstWhere((element) => element.id == account.id, orElse: () => account);
+
+          var currentBalance = 0.0;
+          for (var txn in activeAccount.transactions) {
+            if (txn.payment == "sent") {
+              currentBalance -= txn.amount;
+            } else {
+              currentBalance += txn.amount;
+            }
+          }
           return SizedBox(
             width: double.infinity,
             height: double.infinity,
@@ -201,40 +218,41 @@ class _AccountDetailsState extends State<AccountDetails> {
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 10.0,
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.blue[800] as Color,
-                            Colors.blue[300] as Color
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )),
+                                decoration: BoxDecoration(
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 10.0,
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                                    ),
                     child: Column(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              "${activeAccount.accountName}'s Balance : ",
-                              style: GoogleFonts.poppins(
-                                  fontSize: 24,
-                                  // fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                            Flexible(
+                              child: Text(
+                                "${activeAccount.accountName}'s Balance : ",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 24,
+                                    // fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            Text(
-                              "₹${accounts.getBalance(__userIndex)}",
-                              style: GoogleFonts.poppins(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green[900]),
+                            Flexible(
+                              child: Text(
+                                "₹$currentBalance",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green[100]),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             )
                           ],
                         ),
@@ -244,12 +262,12 @@ class _AccountDetailsState extends State<AccountDetails> {
                   Text(
                     "Transaction History",
                     style: GoogleFonts.poppins(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                        fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   if (activeAccount.transactions.isEmpty)
                     Text(
                       "Transaction History not available.",
-                      style: GoogleFonts.poppins(),
+                      style: GoogleFonts.poppins(color: Colors.white70),
                     ),
                   if (activeAccount.transactions.isEmpty == false)
                     SizedBox(
@@ -274,7 +292,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                           ),
                                         ),
                                       )
-                                      .toList(),
+                                      ,
                                 ],
                               ),
                             )
@@ -282,7 +300,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                               itemCount: activeAccount.transactions.length,
                               itemBuilder: ((context, index) => TransactionTile(
                                     index: index,
-                                    userIndex: __userIndex,
+                                    userIndex: _userIndex,
                                     transaction: activeAccount
                                         .transactions.reversed
                                         .toList()[index],
@@ -301,6 +319,7 @@ class _AccountDetailsState extends State<AccountDetails> {
             ),
           );
         }),
+      ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

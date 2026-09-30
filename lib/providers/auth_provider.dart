@@ -57,7 +57,7 @@ class Auth extends ChangeNotifier {
                 GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           duration: const Duration(seconds: 3),
-          backgroundColor: Theme.of(context).errorColor,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -111,7 +111,34 @@ class Auth extends ChangeNotifier {
                 GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           duration: const Duration(seconds: 3),
-          backgroundColor: Theme.of(context).errorColor,
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
+
+  Future<void> forgotPassword(BuildContext context, String email) async {
+    try {
+      await firebase.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Password reset email sent. Check your inbox.",
+            style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } on FirebaseAuthException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            error.message ?? "An error occurred.",
+            style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -129,7 +156,7 @@ class Auth extends ChangeNotifier {
                 GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           duration: const Duration(seconds: 3),
-          backgroundColor: Theme.of(context).errorColor,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
